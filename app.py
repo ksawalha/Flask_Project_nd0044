@@ -81,7 +81,6 @@ def venues():
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
     search_term = request.form['search_term']
-    # search venue by name, state or city located
     search_query = Venue.query.filter(Venue.name.ilike(f'%{search_term}%') | Venue.city.ilike(
         f'%{search_term}%') | Venue.state.ilike(f'%{search_term}%'))
     searched_results = list(search_query)
