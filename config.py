@@ -5,6 +5,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 
-# Connect to the database
+#setup database connection
 SQLALCHEMY_DATABASE_URI = 'sqlite:///fyyurapp.db'
 
