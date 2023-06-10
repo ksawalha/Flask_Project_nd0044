@@ -1,6 +1,3 @@
-#----------------------------------------------------------------------------#
-# Imports
-#----------------------------------------------------------------------------#
 import os
 import sys
 from unittest import result
@@ -21,9 +18,6 @@ from flask_migrate import Migrate
 from models import (Venue, Artist, Show, db)
 from flask_wtf.csrf import CSRFProtect
 from jinja2.utils import markupsafe 
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
 
 app = Flask(__name__)
 moment = Moment(app)
@@ -35,14 +29,7 @@ csrf = CSRFProtect(app)
 
 markupsafe.Markup()
 Markup('')
-# ! drops the database tables and starts fresh can be used to initialize a clean database
-# db.drop_all()
-# db.create_all()
 migrate = Migrate(app, db)
-
-#----------------------------------------------------------------------------#
-# Filters.
-#----------------------------------------------------------------------------#
 
 
 def format_datetime(value, format='medium'):
@@ -56,11 +43,6 @@ def format_datetime(value, format='medium'):
 
 app.jinja_env.filters['datetime'] = format_datetime
 
-#----------------------------------------------------------------------------#
-# Controllers.
-#----------------------------------------------------------------------------#
-
-
 @app.route('/')
 def index():
     new_venues = Venue.query.order_by(desc(Venue.created_at)).limit(10).all()
@@ -70,10 +52,6 @@ def index():
         'pages/home.html',
         venues=new_venues,
         artists=new_artists)
-
-
-# #  Venues
-# #  ----------------------------------------------------------------
 
 @app.route('/venues')
 def venues():
@@ -178,10 +156,6 @@ def show_venue(venue_id):
         "upcoming_shows_count": upcoming_shows_count,
     }
     return render_template('pages/show_venue.html', venue=data)
-
-#  Create Venue
-#  ----------------------------------------------------------------
-
 
 @app.route('/venues/create', methods=['GET'])
 def create_venue_form():
@@ -299,10 +273,6 @@ def delete_venue(venue_id):
         db.session.close()
     return render_template('pages/home.html')
 
-#  Artists
-#  ----------------------------------------------------------------
-
-
 @app.route('/artists')
 def artists():
     data = Artist.query.distinct(Artist.name).all()
@@ -387,10 +357,6 @@ def show_artist(artist_id):
     }
     return render_template('pages/show_artist.html', artist=data)
 
-#  Update
-#  ----------------------------------------------------------------
-
-
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
     artist = Artist.query.get(artist_id)
@@ -441,11 +407,7 @@ def edit_artist_submission(artist_id):
     else:
         flash("Venue " + request.form['name'] + " was edited succesfully")
     return redirect(url_for('show_artist', artist_id=artist_id))
-
-
-#  Create Artist
-#  ----------------------------------------------------------------
-
+  
 @app.route('/artists/create', methods=['GET'])
 def create_artist_form():
     form = ArtistForm()
@@ -492,10 +454,6 @@ def create_artist_submission():
             ' could not be listed.')
         flash(form.errors)
     return render_template('pages/home.html')
-
-
-#  Shows
-#  ----------------------------------------------------------------
 
 @app.route('/shows')
 def shows():
@@ -574,17 +532,9 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
 
-#----------------------------------------------------------------------------#
-# Launch.
-#----------------------------------------------------------------------------#
+#port config
 
-# Default port:
 if __name__ == '__main__':
     app.run()
 
-# Or specify port manually:
-
-# if __name__ == '__main__':
-#     port = int(os.environ.get('PORT', 5000))
-#     app.run(host='0.0.0.0', port=port)
 
